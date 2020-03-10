@@ -3,16 +3,8 @@
         <b-button class="add-record" @click="showModal('add')">Добавить запись</b-button>
         <div class="count">Всего записей: {{ count }}</div>
         <b-table :items="items" :fields="fields" striped responsive="sm">
-            <template v-slot:cell(trains)="row">
-                amount: {{ row.item.Trains.length }}
-                <b-button size="sm" variant="primary"  @click="showEditList(row.item.Trains, 'trains')" class="mr-2">E</b-button>
-            </template>
-            <template v-slot:cell(carriages)="row">
-                amount: {{ row.item.Carriages.length }}
-                <b-button size="sm" variant="primary" @click="showEditList(row.item.Carriages, 'carriages')" class="mr-2">E</b-button>
-            </template>
             <template v-slot:cell(actions)="row">
-                <!--<b-button size="sm" variant="primary" @click="showModal('edit', row.item)" class="mr-2">E</b-button>-->
+                <b-button size="sm" variant="primary" @click="showModal('edit', row.item)" class="mr-2">E</b-button>
                 <b-button size="sm" variant="danger" @click="deleteRecord(row.item.id)" class="mr-2">X</b-button>
             </template>
         </b-table>
@@ -80,14 +72,6 @@
             </b-form>
         </b-modal>
 
-        <b-modal id="edit-list"
-            title="Редактирование вагонов"
-        >
-            <b-table :items="editList.items" :fields="editFields" striped responsive="sm">
-            </b-table>
-            <b-button size="sm" variant="success" @click="getFreeList(editList.mod)" class="mr-2">+</b-button>
-        </b-modal>
-
     </div>
 </template>
 
@@ -95,7 +79,7 @@
 import { mapState } from 'vuex'
 
 export default {
-    name: "Compositions",
+    name: "Trains",
     data() {
         return {
             modal: {
@@ -110,32 +94,17 @@ export default {
                 colorState: null,
                 seatsState: null,
             },
-            editList: {
-                mod: "trains",
-                items: [],
-            },
-            /*modalList: {
-                mod: "trains",
-                items: [],
-            },*/
-            fields: ['id', 'trains', 'carriages', 'actions'],
+            fields: ['id', 'type', 'color', 'seats', 'compositionId', 'actions'],
         }
     },
     computed: {
         ...mapState({
-            items: state => state.compositions.list,
-            count: state => state.compositions.count,
+            items: state => state.carriages.list,
+            count: state => state.carriages.count,
         }),
         modalTitle() {
             return (this.modal.mod == "add") ? "Добавить вагон" : "Редактировать вагон";
         },
-        editFields() {
-            let fields = {
-                carriages: ['id', 'type', 'color', 'seats', 'actions'],
-                trains: ['id', 'type', 'color', 'actons'],
-            }
-            return fields[this.editList.mod];
-        }
     },
     methods: {
         showModal(mod, data) {
@@ -147,11 +116,6 @@ export default {
                 this.resetModalData();
 
             this.$bvModal.show('modal');
-        },
-        showEditList(data, mod) {
-            this.editList.items = [...data];
-            this.editList.mod = mod;
-            this.$bvModal.show('edit-list');
         },
         handleOk(bvModalEvt) {
             bvModalEvt.preventDefault();
@@ -208,17 +172,13 @@ export default {
             }
         },
         getRecords() {
-            this.$store.dispatch('compositions/getRecords');
+            this.$store.dispatch('carriages/getRecords');
         },
         deleteRecord(id) {
-            this.$store.dispatch('compositions/deleteRecord', id);
-        },
-        getFreeList(mod) {
-            console.log(mod);
-            this.$store.dispatch('compositions/getFreeRecords', mod);
+            this.$store.dispatch('carriages/deleteRecord', id);
         },
     },
-    mounted() {
+    created() {
         this.getRecords();
     }
 }

@@ -14,14 +14,15 @@ export default {
             state.list = state.list.concat(data.list);
             state.count = data.count;
         },
-        addRecord(state, record) {
+        /*addRecord(state, record) {
             state.list.unshift(record);
-        }
+        }*/
     },
     actions: {
         getRecords(context, limit) {
-            api.getRecords('trains', context.state.list.length, limit)
+            api.getRecords('carriages', context.state.list.length, limit)
                 .then((result) => {
+                    console.log(result.data.list);
                     context.commit('setData', result.data)
                 }).catch((e) => {
                     console.log(e.errorMessage);
@@ -29,7 +30,7 @@ export default {
                 });
         },
         deleteRecord(context, id) {
-            api.deleteRecord('trains', id)
+            api.deleteRecord('carriages', id)
                 .then(() => {
                     let limit = context.state.list.length;
                     context.state.list = [];
@@ -40,25 +41,25 @@ export default {
         },
         addRecord(context, data) {
             return new Promise((resolve, reject) => {
-                api.addRecord('trains', data)
+                api.addRecord('carriages', data)
                     .then((result) => {
                         if(result.data.messageError)
                             reject(result.data.messageError);
 
                         let limit = context.state.list.length;
                         context.state.list = [];
-                        context.dispatch('getRecords', limit);
+                        context.dispatch('getRecords', limit+1);
                         //context.commit("addRecord", result.data);
                         resolve();
                     }).catch((e) => {
-                        alert(e, "trains/addRecord");
+                        alert(e, "carriage/addCarriage");
                         reject(e);
                     })
             });
         },
         editRecord(context, data) {
             return new Promise((resolve, reject) => {
-                api.editRecord('trains', data)
+                api.editRecord('carriages', data)
                     .then((result) => {
                         if(result.data.messageError)
                             reject(result.data.messageError);
@@ -69,7 +70,7 @@ export default {
                         //context.commit("addRecord", result.data);
                         resolve();
                     }).catch((e) => {
-                        alert(e, "trains/addCarriage");
+                        alert(e, "carriage/addCarriage");
                         reject(e);
                     })
             });

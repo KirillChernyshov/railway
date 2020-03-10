@@ -4,17 +4,7 @@ const auth = require('../middleware/auth');
 
 const router = express.Router();
 
-var types = ["электровоз", "тепловоз", "электротепловоз"];
-var colors = ["red", "green", "blue"];
-
-router.post('/trains', auth, async (req, res) => {
-    /*for (let i = 0; i < 10; i++) {
-        Train.create({
-            type: types[Math.floor(0 + Math.random() * (2 + 1 - 0))],
-            color: colors[Math.floor(0 + Math.random() * (2 + 1 - 0))],
-        });
-        console.log(i);
-    }*/
+router.post('/carriages', auth, async (req, res) => {
     if (req.user.role != 10) {
         res.send({ errorMessage: "Недостаточно прав!" });
         return;
@@ -22,7 +12,7 @@ router.post('/trains', auth, async (req, res) => {
 
     let limit = (req.body.limit) ? req.body.limit : 20;
 
-    models.Train.findAndCountAll({
+    models.Carriage.findAndCountAll({
         limit: limit,
         offset: req.body.offset,
 
@@ -34,13 +24,13 @@ router.post('/trains', auth, async (req, res) => {
     })
 });
 
-router.delete('/trains/:id', auth, async(req, res) => {
+router.delete('/carriages/:id', auth, async(req, res) => {
     if (req.user.role != 10) {
         res.send({ errorMessage: "Недостаточно прав!" });
         return;
     }
 
-    models.Train.destroy({
+    models.Carriage.destroy({
         where: {
             id: req.params.id
         }
@@ -49,31 +39,7 @@ router.delete('/trains/:id', auth, async(req, res) => {
     });
 });
 
-router.post('/trains/add', auth, async(req, res) => {
-    if (req.user.role != 10) {
-        res.send({ errorMessage: "Недостаточно прав!" });
-        return;
-    }
-
-    let data = req.body.data;
-
-    if (!data.type || !data.color) {
-        res.send({ errorMessage: "Неуказан тип или цвет"});
-        return;
-    }
-
-    models.Train.create({
-        type: data.type,
-        color: data.color,
-    }).then((result) => {
-        res.send(result.dataValues);
-    }).catch((e) => {
-        console.log(e);
-        res.send({ errorMessage: "Запись не была добавлена"});
-    })
-});
-
-router.post('/trains/edit', auth, async(req, res) => {
+router.post('/carriages/add', auth, async(req, res) => {
     if (req.user.role != 10) {
         res.send({ errorMessage: "Недостаточно прав!" });
         return;
@@ -84,18 +50,50 @@ router.post('/trains/edit', auth, async(req, res) => {
     if (!data.type || !data.color) {
         res.send({ errorMessage: "Неуказан тип или цвет!"});
         return;
-    }
-
-    let train = await models.Train.findOne({ where: { id: data.id }});
-
-    if (!train) {
-        res.send({ errorMessage: `Поезд с id: ${data.id} не найден!`});
+    } else if (parseInt(data.seats) < 0) {
+        res.send({ errorMessage: "Кол-во мест не должно быть меньше нуля!"});
         return;
     }
 
-    train.update({
+    models.Carriage.create({
         type: data.type,
         color: data.color,
+        seats: parseInt(data.seats),
+    }).then((result) => {
+        res.send(result.dataValues);
+    }).catch((e) => {
+        console.log(e);
+        res.send({ errorMessage: "Запись не была добавлена"});
+    })
+});
+
+router.post('/carriages/edit', auth, async(req, res) => {
+    if (req.user.role != 10) {
+        res.send({ errorMessage: "Недостаточно прав!" });
+        return;
+    }
+
+    let data = req.body.data;
+
+    if (!data.type || !data.color) {
+        res.send({ errorMessage: "Неуказан тип или цвет!"});
+        return;
+    } else if (parseInt(data.seats) < 0) {
+        res.send({ errorMessage: "Кол-во мест не должно быть меньше нуля!"});
+        return;
+    }
+
+    let carriage = await models.Carriage.findOne({ where: { id: data.id }});
+
+    if (!carriage) {
+        res.send({ errorMessage: `Вагон с id: ${data.id} не найден!`});
+        return;
+    }
+
+    carriage.update({
+        type: data.type,
+        color: data.color,
+        seats: parseInt(data.seats),
     }).then((result) => {
         res.send(result.dataValues);
     }).catch((e) => {
@@ -103,22 +101,6 @@ router.post('/trains/edit', auth, async(req, res) => {
         res.send({ errorMessage: "Запись не была обновлена!"});
     })
 
-});
-
-router.get('/trains/free', auth, async(req, res) => {
-    if (req.user.role != 10) {
-        res.send({ errorMessage: "Недостаточно прав!" });
-        return;
-    }
-
-    models.Train.findAll({
-        where: {
-            compositionId: null,
-        }
-    }).then((result) => {
-        res.send(result);
-        console.log("res", result[0].id);
-    })
 });
 
 module.exports = router;

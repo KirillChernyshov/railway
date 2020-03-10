@@ -8,9 +8,12 @@ const Carriage = sequelize.define("carriage", {
     },
     seats: {
         type: Sequelize.INTEGER,
+        allowNull: true,
+    },
+    color: {
+        type: Sequelize.STRING,
+        allowNull: false,
     }
 });
-
-Carriage.sync();
 
 module.exports = Carriage;

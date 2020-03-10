@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import user from './modules/user.js'
 import compositions from './modules/compositions.js'
 import trains from './modules/trains.js'
+import carriages from './modules/carriages.js'
 
 Vue.use(Vuex)
 
@@ -20,6 +21,7 @@ export default new Vuex.Store({
   modules: {
       user,
       compositions,
+      carriages,
       trains,
   }
 });

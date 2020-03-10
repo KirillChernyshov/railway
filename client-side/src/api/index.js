@@ -17,7 +17,19 @@ export default {
     async logOut (/*token*/) {
         return axios.post(`${url}/user/logout`, {}, /*{ headers: { Authorization: `Bearer: ${token}` } }*/)
     },
-    async getTrains (offset) {
-        return axios.post(`${url}/trains`, { offset: offset })
+    async getRecords (path, offset, limit) {
+        return axios.post(`${url}/${path}`, { offset: offset, limit: limit })
+    },
+    async deleteRecord (path, id) {
+        return axios.delete(`${url}/${path}/${id}`);
+    },
+    async addRecord (path, data) {
+        return axios.post(`${url}/${path}/add`, { data: data });
+    },
+    async editRecord (path, data) {
+        return axios.post(`${url}/${path}/edit`, { data: data });
+    },
+    async getFreeRecords (path) {
+        return axios.get(`${url}/${path}/free`);
     }
 }

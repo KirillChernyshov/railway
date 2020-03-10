@@ -27,6 +27,7 @@ export default {
     components: {
         compositions: () => import('./Compositions.vue'),
         trains: () => import('./Trains.vue'),
+        carriages: () => import('./Carriages.vue'),
     },
     created() {
 

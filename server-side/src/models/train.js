@@ -1,6 +1,8 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../db/index.js");
 
+let Composition = require("./composition.js");
+
 const Train = sequelize.define("train", {
     type: {
         type: Sequelize.STRING,
@@ -9,9 +11,7 @@ const Train = sequelize.define("train", {
     color: {
         type: Sequelize.STRING,
         allowNull: false,
-    }
+    },
 });
-
-Train.sync();
 
 module.exports = Train;

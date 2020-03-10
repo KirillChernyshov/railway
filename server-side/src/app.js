@@ -4,6 +4,8 @@ const bodyParser = require('body-parser')
 
 const userRouter = require('./routers/user.js');
 const trainRouter = require('./routers/train.js');
+const carriageRouter = require('./routers/carriage.js');
+const compositionRouter = require('./routers/composition.js');
 
 const port = 5000;
 const app = express();
@@ -13,6 +15,8 @@ app.use(bodyParser.json())
 app.use(cors());
 app.use(userRouter);
 app.use(trainRouter);
+app.use(carriageRouter);
+app.use(compositionRouter);
 
 app.listen(port, () => {
     console.log(`Server running on port: ${port}`);
