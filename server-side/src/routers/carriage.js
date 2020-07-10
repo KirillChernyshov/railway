@@ -103,4 +103,19 @@ router.post('/carriages/edit', auth, async(req, res) => {
 
 });
 
+router.get('/carriages/free', auth, async(req, res) => {
+    if (req.user.role != 10) {
+        res.send({ errorMessage: "Недостаточно прав!" });
+        return;
+    }
+
+    models.Carriage.findAll({
+        where: {
+            compositionId: null,
+        }
+    }).then((result) => {
+        res.send(result);
+    })
+});
+
 module.exports = router;

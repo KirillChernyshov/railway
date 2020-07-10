@@ -31,5 +31,17 @@ export default {
     },
     async getFreeRecords (path) {
         return axios.get(`${url}/${path}/free`);
+    },
+    async updateCompositionRelations (path, data, id) {
+        return axios.post(`${url}/compositions/update/${path}/${id}`, data);
+    },
+    async updateRouteRelations (path, data, id) {
+        return axios.post(`${url}/routes/update/${path}/${id}`, data);
+    },
+    async getStations (id) {
+        return axios.get(`${url}/stations/${id}`);
+    },
+    async getTimetable () {
+        return axios.get(`${url}/timetable`);
     }
 }

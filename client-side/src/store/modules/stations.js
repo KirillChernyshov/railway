@@ -20,7 +20,7 @@ export default {
     },
     actions: {
         getRecords(context, limit) {
-            api.getRecords('trains', context.state.list.length, limit)
+            api.getRecords('stations', context.state.list.length, limit)
                 .then((result) => {
                     context.commit('setData', result.data)
                 }).catch((e) => {
@@ -29,7 +29,7 @@ export default {
                 });
         },
         deleteRecord(context, id) {
-            api.deleteRecord('trains', id)
+            api.deleteRecord('stations', id)
                 .then(() => {
                     let limit = context.state.list.length;
                     context.state.list = [];
@@ -40,7 +40,7 @@ export default {
         },
         addRecord(context, data) {
             return new Promise((resolve, reject) => {
-                api.addRecord('trains', data)
+                api.addRecord('stations', data)
                     .then((result) => {
                         if(result.data.messageError)
                             reject(result.data.messageError);
@@ -51,14 +51,14 @@ export default {
                         //context.commit("addRecord", result.data);
                         resolve();
                     }).catch((e) => {
-                        alert(e, "trains/addRecord");
+                        alert(e, "stations/addRecord");
                         reject(e);
                     })
             });
         },
         editRecord(context, data) {
             return new Promise((resolve, reject) => {
-                api.editRecord('trains', data)
+                api.editRecord('stations', data)
                     .then((result) => {
                         if(result.data.messageError)
                             reject(result.data.messageError);
@@ -69,7 +69,7 @@ export default {
                         //context.commit("addRecord", result.data);
                         resolve();
                     }).catch((e) => {
-                        alert(e, "trains/addCarriage");
+                        alert(e, "stations/addCarriage");
                         reject(e);
                     })
             });

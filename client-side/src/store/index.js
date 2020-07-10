@@ -5,6 +5,8 @@ import user from './modules/user.js'
 import compositions from './modules/compositions.js'
 import trains from './modules/trains.js'
 import carriages from './modules/carriages.js'
+import stations from './modules/stations.js'
+import routes from './modules/routes.js'
 
 Vue.use(Vuex)
 
@@ -23,5 +25,7 @@ export default new Vuex.Store({
       compositions,
       carriages,
       trains,
+      stations,
+      routes,
   }
 });

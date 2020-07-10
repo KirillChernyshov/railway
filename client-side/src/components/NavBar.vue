@@ -6,7 +6,7 @@
             <b-collapse id="nav-collapse" is-nav>
                 <b-navbar-nav>
                     <b-nav-item href="/compositions" v-if="userRole == 10">Составы</b-nav-item>
-                    <b-nav-item href="#" disabled>Disabled</b-nav-item>
+                    <b-nav-item href="/timetable" :disabled="!userName">Расписание</b-nav-item>
                 </b-navbar-nav>
 
                 <b-navbar-nav class="ml-auto">
@@ -123,6 +123,7 @@ export default {
         },
         logOut() {
             this.$store.dispatch('user/logOut')
+            this.$router.push('/');
         }
     }
 }

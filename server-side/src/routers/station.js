@@ -1,20 +1,11 @@
 const express = require('express');
 const models = require('../models/index.js');
 const auth = require('../middleware/auth');
+const Sequelize = require("sequelize");
 
 const router = express.Router();
 
-var types = ["электровоз", "тепловоз", "электротепловоз"];
-var colors = ["red", "green", "blue"];
-
-router.post('/trains', auth, async (req, res) => {
-    /*for (let i = 0; i < 10; i++) {
-        Train.create({
-            type: types[Math.floor(0 + Math.random() * (2 + 1 - 0))],
-            color: colors[Math.floor(0 + Math.random() * (2 + 1 - 0))],
-        });
-        console.log(i);
-    }*/
+router.post('/stations', auth, async (req, res) => {
     if (req.user.role != 10) {
         res.send({ errorMessage: "Недостаточно прав!" });
         return;
@@ -22,7 +13,7 @@ router.post('/trains', auth, async (req, res) => {
 
     let limit = (req.body.limit) ? req.body.limit : 20;
 
-    models.Train.findAndCountAll({
+    models.Station.findAndCountAll({
         limit: limit,
         offset: req.body.offset,
 
@@ -34,13 +25,13 @@ router.post('/trains', auth, async (req, res) => {
     })
 });
 
-router.delete('/trains/:id', auth, async(req, res) => {
+router.delete('/stations/:id', auth, async(req, res) => {
     if (req.user.role != 10) {
         res.send({ errorMessage: "Недостаточно прав!" });
         return;
     }
 
-    models.Train.destroy({
+    models.Station.destroy({
         where: {
             id: req.params.id
         }
@@ -49,7 +40,7 @@ router.delete('/trains/:id', auth, async(req, res) => {
     });
 });
 
-router.post('/trains/add', auth, async(req, res) => {
+router.post('/stations/add', auth, async(req, res) => {
     if (req.user.role != 10) {
         res.send({ errorMessage: "Недостаточно прав!" });
         return;
@@ -57,14 +48,14 @@ router.post('/trains/add', auth, async(req, res) => {
 
     let data = req.body.data;
 
-    if (!data.type || !data.color) {
-        res.send({ errorMessage: "Неуказан тип или цвет"});
+    if (!data.name || !data.city) {
+        res.status(400).send({ errorMessage: "Неуказано имя или город"});
         return;
     }
 
-    models.Train.create({
-        type: data.type,
-        color: data.color,
+    models.Station.create({
+        name: data.name,
+        city: data.city,
     }).then((result) => {
         res.send(result.dataValues);
     }).catch((e) => {
@@ -73,7 +64,7 @@ router.post('/trains/add', auth, async(req, res) => {
     })
 });
 
-router.post('/trains/edit', auth, async(req, res) => {
+router.post('/stations/edit', auth, async(req, res) => {
     if (req.user.role != 10) {
         res.send({ errorMessage: "Недостаточно прав!" });
         return;
@@ -81,21 +72,21 @@ router.post('/trains/edit', auth, async(req, res) => {
 
     let data = req.body.data;
 
-    if (!data.type || !data.color) {
+    /*if (!data.type || !data.color) {
         res.send({ errorMessage: "Неуказан тип или цвет!"});
         return;
-    }
+    }*/
 
-    let train = await models.Train.findOne({ where: { id: data.id }});
+    let station = await models.Station.findOne({ where: { id: data.id }});
 
-    if (!train) {
-        res.send({ errorMessage: `Поезд с id: ${data.id} не найден!`});
+    if (!station) {
+        res.send({ errorMessage: `Станция с id: ${data.id} не найдена!`});
         return;
     }
 
-    train.update({
-        type: data.type,
-        color: data.color,
+    station.update({
+        name: data.name,
+        city: data.city,
     }).then((result) => {
         res.send(result.dataValues);
     }).catch((e) => {
@@ -103,21 +94,6 @@ router.post('/trains/edit', auth, async(req, res) => {
         res.send({ errorMessage: "Запись не была обновлена!"});
     })
 
-});
-
-router.get('/trains/free', auth, async(req, res) => {
-    if (req.user.role != 10) {
-        res.send({ errorMessage: "Недостаточно прав!" });
-        return;
-    }
-
-    models.Train.findAll({
-        where: {
-            compositionId: null,
-        }
-    }).then((result) => {
-        res.send(result);
-    })
 });
 
 module.exports = router;

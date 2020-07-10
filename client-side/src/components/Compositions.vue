@@ -1,15 +1,15 @@
 <template>
     <div>
-        <b-button class="add-record" @click="showModal('add')">Добавить запись</b-button>
+        <b-button class="add-record" @click="addRecord()">Добавить запись</b-button>
         <div class="count">Всего записей: {{ count }}</div>
         <b-table :items="items" :fields="fields" striped responsive="sm">
             <template v-slot:cell(trains)="row">
                 amount: {{ row.item.Trains.length }}
-                <b-button size="sm" variant="primary"  @click="showEditList(row.item.Trains, 'trains')" class="mr-2">E</b-button>
+                <b-button size="sm" variant="primary"  @click="showEditList(row.item.Trains, 'trains', row.item.id)" class="mr-2">E</b-button>
             </template>
             <template v-slot:cell(carriages)="row">
                 amount: {{ row.item.Carriages.length }}
-                <b-button size="sm" variant="primary" @click="showEditList(row.item.Carriages, 'carriages')" class="mr-2">E</b-button>
+                <b-button size="sm" variant="primary" @click="showEditList(row.item.Carriages, 'carriages', row.item.id)" class="mr-2">E</b-button>
             </template>
             <template v-slot:cell(actions)="row">
                 <!--<b-button size="sm" variant="primary" @click="showModal('edit', row.item)" class="mr-2">E</b-button>-->
@@ -18,74 +18,29 @@
         </b-table>
         <b-button v-if="count != items.length" @click="getRecords">Загрузить еще</b-button>
 
-        <b-modal id="modal"
-            :title="modalTitle"
-            ok-title="Ок"
-            cancel-title="Отмена"
-            @ok="handleOk"
-            @show="resetModal"
+        <b-modal id="edit-list"
+            :title="editList.getTitle()"
+            @ok="editListOkHandler"
+            @hide="editList.showAddBtn = true;"
         >
-            <b-form
-                @submit.stop.prevent="handleSubmit"
-                class="add-form"
-            >
-                <b-form-group
-                    label="ID:"
-                    v-if="modal.data.id"
-                >
-                    <b-form-input
-                        type="text"
-                        required
-                        v-model="modal.data.id"
-                        disabled
-                    />
-                </b-form-group>
-                <b-form-group
-                    label="Тип:"
-                >
-                    <b-form-input
-                        ref="type"
-                        :state="modal.typeState"
-                        type="text"
-                        required
-                        placeholder="Введите тип вагона"
-                        v-model="modal.data.type"
-                    />
-                </b-form-group>
-                <b-form-group
-                    label="Кол-во мест:"
-                >
-                    <b-form-input
-                        ref="seats"
-                        :state="modal.seatsState"
-                        type="number"
-                        required
-                        placeholder="Введите кол-во мест"
-                        v-model="modal.data.seats"
-                    />
-                </b-form-group>
-                <b-form-group
-                    label="Цвет:"
-                >
-                    <b-form-input
-                        ref="color"
-                        :state="modal.colorState"
-                        type="text"
-                        required
-                        placeholder="Введите цвет вагона"
-                        v-model="modal.data.color"
-                    />
-                </b-form-group>
-                <span class="error-message">{{ modal.msg }}</span>
-            </b-form>
+            <b-table :items="editList.items" :fields="editFields" sticky-header striped responsive="sm">
+                <template v-slot:cell(actions)="row">
+                    <b-button size="sm" variant="danger" @click="setStatus(row.item)" class="mr-2">X</b-button>
+                </template>
+            </b-table>
+            <b-button v-show="editList.showAddBtn" size="sm" variant="success" @click="getFreeList(editList.mod)" class="mr-2">+</b-button>
         </b-modal>
 
-        <b-modal id="edit-list"
-            title="Редактирование вагонов"
+        <b-modal id="add-list"
+            :title="editList.getAddTitle()"
+            ok-only
+            @ok="addListOkHandler"
         >
-            <b-table :items="editList.items" :fields="editFields" striped responsive="sm">
+            <b-table :items="addingList" :fields="editFields" sticky-header striped responsive="sm">
+                <template v-slot:cell(actions)="row">
+                    <b-button size="sm" variant="success" @click="addFreeRecord(row.item)" class="mr-2">+</b-button>
+                </template>
             </b-table>
-            <b-button size="sm" variant="success" @click="getFreeList(editList.mod)" class="mr-2">+</b-button>
         </b-modal>
 
     </div>
@@ -98,114 +53,38 @@ export default {
     name: "Compositions",
     data() {
         return {
-            modal: {
-                mod: "",
-                data: {
-                    id: "",
-                    type: "",
-                    color: "",
-                    seats: "",
-                },
-                typeState: null,
-                colorState: null,
-                seatsState: null,
-            },
             editList: {
                 mod: "trains",
+                id: null,
                 items: [],
+                showAddBtn: true,
+                getTitle () {
+                    return (this.mod == "trains") ? "Изменить поезда в составе" : "Изменить вагоны в составе";
+                },
+                getAddTitle () {
+                    return (this.mod == "trains") ? "Список свободных поездов" : "Список свободных вагонов";
+                }
             },
-            /*modalList: {
-                mod: "trains",
-                items: [],
-            },*/
-            fields: ['id', 'trains', 'carriages', 'actions'],
+            fields: ['id', 'trains', 'carriages', 'routeId', 'actions'],
         }
     },
     computed: {
         ...mapState({
             items: state => state.compositions.list,
             count: state => state.compositions.count,
+            addingList: state => state.compositions.addingList,
         }),
-        modalTitle() {
-            return (this.modal.mod == "add") ? "Добавить вагон" : "Редактировать вагон";
-        },
         editFields() {
             let fields = {
                 carriages: ['id', 'type', 'color', 'seats', 'actions'],
-                trains: ['id', 'type', 'color', 'actons'],
+                trains: ['id', 'type', 'color', 'actions'],
             }
             return fields[this.editList.mod];
         }
     },
     methods: {
-        showModal(mod, data) {
-            this.modal.mod = mod;
-
-            if (mod == "edit")
-                this.modal.data = {...data};
-            else
-                this.resetModalData();
-
-            this.$bvModal.show('modal');
-        },
-        showEditList(data, mod) {
-            this.editList.items = [...data];
-            this.editList.mod = mod;
-            this.$bvModal.show('edit-list');
-        },
-        handleOk(bvModalEvt) {
-            bvModalEvt.preventDefault();
-
-            if (!this.checkValid())
-                return;
-
-            if (this.modal.mod == "add")
-                this.handleAddSubmit();
-            else if (this.modal.mod == "edit")
-                this.handleEditSubmit();
-        },
-        handleAddSubmit() {
-            this.$store.dispatch('carriages/addRecord', this.modal.data)
-                .then(() => {
-                    this.$bvModal.hide('modal');
-                })
-                .catch((e) => {
-                    this.modal.typeState = null;
-                    this.modal.colorState = null;
-                    this.modal.seatsState = null;
-                    this.modal.msg = e;
-                });
-        },
-        handleEditSubmit() {
-            this.$store.dispatch('carriages/editRecord', this.modal.data)
-                .then(() => {
-                    this.$bvModal.hide('modal');
-                })
-                .catch((e) => {
-                    this.modal.typeState = null;
-                    this.modal.colorState = null;
-                    this.modal.seatsState = null;
-                    this.modal.msg = e;
-                });
-        },
-        checkValid() {
-            let valid = 0;
-            valid += this.modal.typeState = this.$refs.type.checkValidity();
-            valid += this.modal.seatsState = !this.$refs.seats.value || parseInt(this.$refs.seats.value) >= 0;
-            valid += this.modal.colorState = this.$refs.color.checkValidity();
-            return valid == 3;
-        },
-        resetModal() {
-            for (let key in this.modal) {
-                if (key == "data" || key == "mod")
-                    continue;
-                this.modal[key] = null;
-            }
-        },
-        resetModalData() {
-            for (let key in this.modal.data) {
-                this.modal.data[key] = null;
-            }
+        addRecord() {
+            this.$store.dispatch('compositions/addRecord')
         },
         getRecords() {
             this.$store.dispatch('compositions/getRecords');
@@ -213,10 +92,69 @@ export default {
         deleteRecord(id) {
             this.$store.dispatch('compositions/deleteRecord', id);
         },
+        // Edit list logic
+        showEditList(data, mod, id) {
+            this.editList.id = id;
+            this.editList.items = [...data];
+            this.editList.mod = mod;
+            this.$bvModal.show('edit-list');
+            this.$store.dispatch('compositions/getFreeRecords', mod);
+        },
         getFreeList(mod) {
             console.log(mod);
             this.$store.dispatch('compositions/getFreeRecords', mod);
+            this.showAddBtn = true;
+            this.$bvModal.show('add-list');
         },
+        setStatus(item) {
+            if (item._rowVariant == 'success') {
+                let list = this.editList.items;
+                let n = list.indexOf(item);
+                list.splice(n, 1);
+            }
+            else
+                item._rowVariant = (item._rowVariant == 'danger') ? '' : 'danger';
+            //this.editList.items.push({id: 1, color: 'Test', type: 'test'})
+
+            this.$forceUpdate()
+            //if (item._rowVariant == 'success')
+        },
+        editListOkHandler() {
+            let data = {
+                del: [],
+                add: [],
+            }
+
+            for (let item of this.editList.items) {
+                if (item._rowVariant == 'success')
+                    data.add.push(item);
+                else if (item._rowVariant == 'danger')
+                    data.del.push(item);
+
+            }
+            if (!data.del.length && !data.add.length)
+                return;
+            this.$store.dispatch('compositions/updateRelations', { data: data, mod: this.editList.mod, id: this.editList.id })
+            this.$forceUpdate()
+        },
+        // Add list logic
+        addFreeRecord(item) {
+            item._rowVariant = (item._rowVariant) ? '' : 'success';
+            //this.editList.items.push(item);
+            //this.$bvModal.hide('add-list');
+
+            this.$forceUpdate()
+        },
+        addListOkHandler() {
+            for (let key in this.addingList)
+                if (this.addingList[key]._rowVariant)
+                    this.editList.items.push(this.addingList[key])
+
+            this.editList.showAddBtn = false;
+        }
+    },
+    watch: {
+
     },
     mounted() {
         this.getRecords();
