@@ -9,7 +9,7 @@ const User = sequelize.define("user", {
     },
     role: {
         type: Sequelize.INTEGER,
-        allownull: false,
+        allowNull: false,
     },
     email: {
         type: Sequelize.STRING,
@@ -38,7 +38,7 @@ User.findByCredentials = async (email, password) => {
         }
     });
 
-    if (user && user.password == password)
+    if (user && user.password === password)
         return user;
 };
 

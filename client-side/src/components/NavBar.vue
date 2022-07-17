@@ -5,7 +5,7 @@
 
             <b-collapse id="nav-collapse" is-nav>
                 <b-navbar-nav>
-                    <b-nav-item href="/compositions" v-if="userRole == 10">Составы</b-nav-item>
+                    <b-nav-item href="/compositions" :disabled="userRole !== 10">Составы</b-nav-item>
                     <b-nav-item href="/timetable" :disabled="!userName">Расписание</b-nav-item>
                 </b-navbar-nav>
 
@@ -97,7 +97,7 @@ export default {
             let valid = 0;
             valid += this.login.emailState = this.$refs.email.checkValidity();
             valid += this.login.passwordState = this.$refs.password.checkValidity();
-            return valid == 2;
+            return valid === 2;
         },
         handleSubmit() {
             this.login.msg = "";
