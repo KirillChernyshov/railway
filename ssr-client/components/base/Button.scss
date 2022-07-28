@@ -1,0 +1,84 @@
+@import "~/assets/styles/colors";
+
+%default {
+  background-color: $color-btn-bg;
+  border-color: $color-btn-border;
+  box-shadow: $color-btn-shadow, $color-btn-inset-shadow;
+  color: $color-btn-text;
+  transition: all 80ms ease-out;
+
+  &:hover {
+    background-color: $color-btn-hover-bg;
+    border-color: $color-btn-hover-border;
+    transition-duration: .1s;
+  }
+
+  &:active {
+    background-color: $color-btn-active-bg;
+    border-color: $color-btn-active-border;
+    transition: none;
+  }
+}
+
+%primary {
+  @extend %default;
+  background-color: $color-btn-primary-bg;
+  border-color: $color-btn-primary-border;
+  color: $color-btn-primary-text;
+
+  &:hover {
+    background-color: $color-btn-primary-hover-bg;
+    border-color: $color-btn-primary-border;
+  }
+
+  &:active {
+    background-color: $color-btn-primary-selected-bg;
+    box-shadow: $color-btn-primary-selected-shadow;
+  }
+}
+
+%danger {
+  @extend %default;
+  color: $color-btn-danger-text;
+
+  &:hover {
+    color: $color-btn-danger-hover-text;
+    background-color: $color-btn-danger-hover-bg;
+    border-color: $color-btn-danger-hover-border;
+    box-shadow: $color-btn-danger-hover-shadow, $color-btn-danger-hover-inset-shadow;
+  }
+
+  &:active {
+    color: $color-btn-danger-selected-text;
+    background-color: $color-btn-danger-selected-bg;
+    border-color: $color-btn-danger-selected-border;
+    box-shadow: $color-btn-danger-selected-shadow;
+  }
+}
+
+.btn {
+  position: relative;
+  display: flex;
+  padding: 5px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid;
+  border-radius: 6px;
+  gap: 5px;
+
+  &.default {
+    @extend %default;
+  }
+
+  &.primary {
+    @extend %primary;
+  }
+
+  &.danger {
+    @extend %danger;
+  }
+}
