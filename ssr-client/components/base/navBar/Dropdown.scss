@@ -1,0 +1,67 @@
+@import "~/assets/styles/colors";
+@import "~/assets/styles/mixins";
+
+.dropdown {
+  color: $first-font-color;
+  cursor: pointer;
+  margin: auto 12px;
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  position: relative;
+
+  @include transition(.3s);
+
+  &:hover {
+    color: $second-font-color;
+  }
+
+  &.active {
+    color: $second-font-color;
+
+    svg {
+      transform: rotate(180deg);
+    }
+  }
+
+  svg {
+    height: 14px;
+    margin-left: 5px;
+    @include transition(.2s);
+  }
+
+  .panel {
+    background: $background-modal;
+    border: $border-color solid 1px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    max-height: 400px;
+    max-width: 250px;
+    position: absolute;
+    padding: 4px 0;
+    top: calc(100% + 5px);
+
+    &.right {
+      right: 0;
+    }
+
+    &>* {
+      //min-height: 24px;
+      margin: 0;
+      padding: 6px 12px;
+      border-bottom: $border-color solid 1px;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        color: $first-font-color;
+        background: #1f6feb;
+      }
+    }
+  }
+}

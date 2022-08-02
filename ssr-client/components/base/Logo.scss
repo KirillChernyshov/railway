@@ -1,0 +1,19 @@
+@import "~/assets/styles/mixins";
+@import "~/assets/styles/colors";
+
+.logo {
+  background: $first-font-color;
+  border-radius: 50%;
+  display: flex;
+  color: #0d1117;
+  @include transition(.2s);
+
+  svg {
+    height: 60%;
+    margin: auto;
+  }
+
+  &:hover {
+    opacity: .7;
+  }
+}

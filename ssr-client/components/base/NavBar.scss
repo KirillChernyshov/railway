@@ -1,0 +1,23 @@
+@import "~/assets/styles/colors";
+
+.nav-bar {
+  background-color: $nav-color;
+  border-bottom: 1px solid $border-color;
+  display: flex;
+  justify-content: space-between;
+
+  min-height: 60px;
+
+  &>div {
+    display: flex;
+
+    &.center {
+      flex-grow: 1;
+    }
+  }
+
+  :deep(.loader) {
+    align-self: center;
+    margin: 0 10px;
+  }
+}
