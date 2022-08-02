@@ -1,0 +1,53 @@
+@import "~/assets/styles/colors";
+
+.log-in-page {
+  position: relative;
+  height: 100%;
+
+  .box {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: $color-canvas-default;
+    border-color: $color-border-default;
+    box-shadow: 0 0 18px rgb(0 0 0 / 40%);
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    width: 230px;
+
+    h3 {
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      &>* {
+        padding: 0 10px;
+      }
+    }
+
+    .footer {
+      display: flex;
+      justify-content: flex-end;
+      border-top: 1px solid $color-border-default;
+      padding: 10px;
+      gap: 10px;
+
+      &:deep(.loader) {
+        margin: auto auto auto 0;
+      }
+
+      .error-message {
+        color: $color-btn-danger-text;
+        font-size: 10px;
+        word-wrap: break-word;
+        margin: auto auto auto 0;
+      }
+    }
+  }
+}

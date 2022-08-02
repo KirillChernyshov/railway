@@ -20,6 +20,10 @@
   "dependencies": {
     "@nuxt/test-utils-edge": "^3.0.0-rc.6-27648790.4e2667f",
     "@pinia/nuxt": "^0.3.0",
-    "pinia": "^2.0.16"
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
+    "pinia": "^2.0.16",
+    "sequelize": "^6.21.3"
   }
 }

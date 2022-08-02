@@ -13,12 +13,19 @@
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
+  font-size: 14px;
 
   #railway {
     background-image: url("~/assets/imgs/memphis-mini-dark.png");
     color: $first-font-color;
     height: 100vh;
     width: 100vw;
+    overflow: hidden;
+
+    a {
+      color: $first-font-color;
+      font-weight: 500;
+    }
   }
 }
 </style>

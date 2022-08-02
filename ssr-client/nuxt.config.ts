@@ -11,5 +11,12 @@ export default defineNuxtConfig({
             '@fortawesome/fontawesome-svg-core',
             '@fortawesome/free-solid-svg-icons',
         ]
+    },
+    runtimeConfig: {
+        jwtSecretWord: '', // .env NUXT_JWT_SECRET_WORD
+        dbName: '', // .env NUXT_DB_NAME
+        dbUsername: '', // .env NUXT_DB_USERNAME
+        dbPassword: '', // .env NUXT_DB_PASSWORD
+        dbHost: '', // .env NUXT_DB_HOST
     }
 })

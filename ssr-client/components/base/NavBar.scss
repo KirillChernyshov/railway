@@ -15,4 +15,9 @@
       flex-grow: 1;
     }
   }
+
+  :deep(.loader) {
+    align-self: center;
+    margin: 0 10px;
+  }
 }

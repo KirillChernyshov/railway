@@ -24,6 +24,7 @@
         :title="link.title"
         :to="link.to"
       />
+      <slot name="panel" />
     </div>
   </div>
 </template>
