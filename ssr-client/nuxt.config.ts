@@ -12,6 +12,12 @@ export default defineNuxtConfig({
             '@fortawesome/free-solid-svg-icons',
         ]
     },
+    vite: {
+        optimizeDeps: {
+            include: ['pg'],
+            exclude: ['pg-native'],
+        },
+    },
     runtimeConfig: {
         jwtSecretWord: '', // .env NUXT_JWT_SECRET_WORD
         dbName: '', // .env NUXT_DB_NAME

@@ -1,5 +1,6 @@
 import {Sequelize} from "sequelize";
 import {useRuntimeConfig} from "#imports";
+import pg from 'pg';
 
 const config = useRuntimeConfig();
 
@@ -8,6 +9,7 @@ const sequelize = new Sequelize({
     username: config.dbUsername,
     password: String(config.dbPassword),
     dialect: "postgres",
+    dialectModule: pg,
     host: config.dbHost || 'localhost',
     logging: false, //(msg) => console.log('DB: ', msg),
     define: {

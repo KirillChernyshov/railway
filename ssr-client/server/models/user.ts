@@ -1,4 +1,4 @@
-import {Sequelize, DataTypes, Model, InferAttributes, InferCreationAttributes} from "sequelize";
+import {DataTypes, Model, InferAttributes, InferCreationAttributes} from "sequelize";
 import jwt from 'jsonwebtoken';
 import sequelize from "~/server/db";
 import {useRuntimeConfig} from "#imports";
@@ -8,7 +8,7 @@ const config = useRuntimeConfig();
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     declare id: number;
     declare name: string;
-    declare role: number;
+    declare user_role: number;
     declare email: string;
     declare password: string;
     declare token: string;
@@ -31,7 +31,7 @@ User.init({
         type: DataTypes.STRING,
         allowNull: false,
     },
-    role: {
+    user_role: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
@@ -47,7 +47,10 @@ User.init({
         type: DataTypes.STRING,
         allowNull: true,
     },
-}, { sequelize });
+}, {
+    sequelize,
+    modelName: 'rw_user'
+});
 
 User.sync().then(() => {
     console.log('Init User model');
