@@ -1,9 +1,9 @@
 import {defineNuxtRouteMiddleware, navigateTo} from "#imports";
-import {useUserStore} from "~/stores/user";
+import {useUserStore} from "~/stores/userStore";
 
 export default defineNuxtRouteMiddleware((to, from) => {
-    const user = useUserStore();
+    const userStore = useUserStore();
 
-    if (user.role < 5)
+    if (userStore.user.role < 5)
         return (from) ? navigateTo(from) : navigateTo('/');
 });

@@ -1,7 +1,7 @@
 <template>
   <div class="homepage">
     <Loader
-      v-if="user.pendingAuth"
+      v-if="userStore.pendingAuth"
     />
     <template v-else-if="!user.name">
       Для начала работы
@@ -18,10 +18,11 @@
 </template>
 
 <script lang="ts" setup>
-import {useUserStore} from "~/stores/user";
+import {useUserStore} from "~/stores/userStore";
 import Loader from "~/components/tool/Loader.vue";
 
-const user = useUserStore();
+const userStore = useUserStore();
+const user = toRef(userStore, 'user');
 </script>
 
 <style lang="scss" scoped src="./index.scss"/>

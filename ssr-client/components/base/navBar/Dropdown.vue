@@ -18,12 +18,6 @@
       :class="{ right: panelIsRight }"
       ref="panel"
     >
-      <BaseNavBarLink
-        v-for="link in links"
-        :key="link.to + link.title"
-        :title="link.title"
-        :to="link.to"
-      />
       <slot name="panel" />
     </div>
   </div>
@@ -89,5 +83,10 @@ watch(panel, (val) => {
     panelIsRight.value = true;
 })
 </script>
+<style lang="scss" scoped>
+:slotted(.link) {
+  /* Иначе не работает класс из ./Dropdown.scss */
+}
+</style>
 
 <style lang="scss" scoped src="./Dropdown.scss" />

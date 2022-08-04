@@ -1,6 +1,5 @@
 import {setup, $fetch} from "@nuxt/test-utils-edge";
 import {describe, test, expect, beforeEach} from "vitest";
-import {useUserStore} from "../stores/user";
 import {createPinia, setActivePinia} from "pinia";
 
 await setup({
