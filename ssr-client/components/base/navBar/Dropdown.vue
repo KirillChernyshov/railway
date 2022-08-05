@@ -24,7 +24,6 @@
 </template>
 
 <script lang="ts" setup>
-import {BaseNavBarLink} from "#components";
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faCaretDown} from "@fortawesome/free-solid-svg-icons";

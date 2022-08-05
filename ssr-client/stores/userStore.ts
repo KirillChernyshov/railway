@@ -4,13 +4,7 @@ import {useState} from "#imports";
 import {EmptyUser, IUser} from "~/types/user";
 import {IAuth} from "~/types/auth";
 import {authByCredentials, logOut} from "~/client/api/auth";
-
-type ErrorCodes = 404;
-type ErrorMessages = Record<ErrorCodes, string>;
-
-const errorMessages: ErrorMessages = {
-    404: 'Неверный логин и/или пароль'
-}
+import {authErrorMessages} from "~/types/errors";
 
 export const useUserStore = defineStore('user', () => {
     const user: Ref<IUser> = useState<IUser>('user', () => EmptyUser);
@@ -31,7 +25,7 @@ export const useUserStore = defineStore('user', () => {
         } catch (e) {
             // todo: errors codes to types
             const code: number = parseInt(e.message.split(' ')[0]);
-            errorMessage.value = errorMessages[code] || 'Неизвестная ошибка';
+            errorMessage.value = authErrorMessages[code] || 'Неизвестная ошибка';
         } finally {
             pendingAuth.value = false;
         }
