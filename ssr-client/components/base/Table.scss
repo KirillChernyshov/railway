@@ -1,0 +1,39 @@
+@import "~/assets/styles/colors";
+
+.table {
+  display: grid;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: $color-canvas-default;
+  border-color: $color-border-default;
+  border-style: solid;
+  border-width: 1px;
+
+  .cell {
+    border-color: $color-border-default;
+    border-style: solid;
+    border-width: 0;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    padding: 5px;
+
+    &.head {
+      background-color: $color-canvas-subtle;
+      text-align: center;
+      padding: 8px;
+    }
+
+    &.last {
+      border-right-width: 0;
+    }
+
+    &.bottom {
+      border-bottom-width: 0;
+    }
+  }
+
+  .empty {
+    text-align: center;
+    padding: 12px;
+  }
+}
