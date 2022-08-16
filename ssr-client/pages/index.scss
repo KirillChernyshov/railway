@@ -1,3 +1,5 @@
+@import "~/assets/styles/colors";
+
 .homepage {
   width: 90%;
   text-align: center;
@@ -7,5 +9,10 @@
 
   .username {
     font-weight: 600;
+  }
+
+  a {
+    color: $first-font-color;
+    font-weight: 500;
   }
 }

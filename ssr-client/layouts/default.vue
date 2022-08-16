@@ -14,6 +14,7 @@
       />
       <BaseNavBarLink
         title="Составы"
+        :disabled="!user || user.role < 5"
         to="/compositions"
       />
       <template #right>
@@ -50,9 +51,11 @@ import {useUserStore} from "~/stores/userStore";
 import Loader from "~/components/tool/Loader.vue";
 
 const userStore = useUserStore();
+const user = toRef(userStore, 'user');
 
 const logOut = () => {
   userStore.userLogOut();
+  useRouter().replace('/');
 }
 </script>
 

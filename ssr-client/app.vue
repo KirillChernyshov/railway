@@ -30,11 +30,6 @@ body {
     height: 100vh;
     width: 100vw;
     overflow: hidden;
-
-    a {
-      color: $first-font-color;
-      font-weight: 500;
-    }
   }
 }
 </style>
