@@ -1,8 +1,16 @@
 import {useTokenFetch} from "~/composables/useTokenFetch";
+import {Train} from "~/types/train";
 
-//todo: object to Train type
-export const getTrains = (): Promise<Array<object>> => {
+export const getTrains = (): Promise<Array<Train>> => {
     return useTokenFetch('/api/trains', {
         method: 'get',
     })
 }
+
+export const addNewTrain = (train: Partial<Train>): Promise<Train> => {
+    return useTokenFetch('/api/train', {
+        method: 'post',
+        body: train,
+    })
+}
+

@@ -23,6 +23,8 @@ body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
+  position: relative;
+  overflow: hidden;
 
   #railway {
     background-image: url("~/assets/imgs/memphis-mini-dark.png");

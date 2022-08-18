@@ -14,6 +14,11 @@
         <slot name="body" />
       </div>
       <div class="footer">
+        <ToolLoader
+          v-if="pending"
+          class="loader"
+          :size="24"
+        />
         <BaseButton
           v-if="!withoutDangerBtn"
           preset="danger"
@@ -21,7 +26,12 @@
         >
             {{ dangerBtnText }}
         </BaseButton>
-        <BaseButton preset="primary">{{ primaryBtnText }}</BaseButton>
+        <BaseButton
+          preset="primary"
+          @click="ok"
+        >
+          {{ primaryBtnText }}
+        </BaseButton>
       </div>
     </div>
   </div>
@@ -29,7 +39,7 @@
 
 <script setup lang="ts">
 
-defineProps({
+const props = defineProps({
   header: {
     type: String,
     default: 'Header',
@@ -43,17 +53,21 @@ defineProps({
     default: 'Ок',
   },
   withoutDangerBtn: Boolean,
+  pending: Boolean,
 });
 
 const emit = defineEmits(['close', 'ok']);
 
 function close() {
+  if (props.pending)
+    return;
   emit('close');
 }
 
 function ok() {
+  if (props.pending)
+    return;
   emit('ok');
-  emit('close');
 }
 </script>
 
