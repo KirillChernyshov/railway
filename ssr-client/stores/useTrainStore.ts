@@ -1,10 +1,10 @@
 import {defineStore} from "pinia";
-import {addNewTrain, getTrains} from "~/client/api/train";
+import * as api from "~/client/api/train";
 import {Train} from "~/types/train";
 
 
 export const useTrainStore = defineStore('trains', () => {
-    const trainsData = ref([]);
+    const trainsList = ref([]);
     const pending = ref<boolean>(false);
     const resultCode = ref<number>(0);
 
@@ -12,9 +12,9 @@ export const useTrainStore = defineStore('trains', () => {
         pending.value = true;
 
         try {
-            const trains: Array<object> = await getTrains();
+            const trains: Array<object> = await api.getTrains();
 
-            trainsData.value = trains;
+            trainsList.value = trains;
 
         } catch (e) {
             // todo: errors codes to types
@@ -30,9 +30,8 @@ export const useTrainStore = defineStore('trains', () => {
         resultCode.value = 0;
 
         try {
-            console.log(train);
-            const newTrain: Train = await addNewTrain(train);
-            trainsData.value.unshift(newTrain);
+            const newTrain: Train = await api.addNewTrain(train);
+            trainsList.value.unshift(newTrain);
             resultCode.value = 1;
         } catch (e) {
             // todo: error handler
@@ -41,12 +40,47 @@ export const useTrainStore = defineStore('trains', () => {
         }
     }
 
+    const editTrain = async (train: Train) => {
+        pending.value = true;
+        resultCode.value = 0;
+
+        try {
+            const editedTrain = await api.editTrain(train);
+
+            const index = trainsList.value.findIndex((train) => train.id === editedTrain.id);
+
+            if (index > -1)
+                trainsList.value[index] = editedTrain;
+
+            resultCode.value = 1;
+        } catch (e) {
+            // todo: error handler
+        } finally {
+            pending.value = false;
+        }
+    }
+
+    const getTrainById = async (id: number): Promise<Train> => {
+        pending.value = true;
+
+        const train = trainsList.value.find((train => train.id === id));
+
+        if (train)  {
+            pending.value = false;
+            return train;
+        }
+
+        // todo: get from server;
+    }
+
     return {
-        trainsData,
+        trainsList,
         pending,
         resultCode,
 
         getTrainsList,
-        addTrain
+        addTrain,
+        getTrainById,
+        editTrain,
     }
 });

@@ -14,3 +14,10 @@ export const addNewTrain = (train: Partial<Train>): Promise<Train> => {
     })
 }
 
+export const editTrain = (train: Train): Promise<Train> => {
+    return useTokenFetch('/api/train', {
+        method: 'put',
+        body: train,
+    })
+}
+

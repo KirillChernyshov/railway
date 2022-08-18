@@ -1,6 +1,13 @@
 <template>
   <form>
     <BaseInput
+        v-if="localData.id > -1"
+        title="ID#"
+        v-model:value="localData.id"
+        v-model:error="localErrors.id"
+        readonly
+    />
+    <BaseInput
         title="Тип"
         v-model:value="localData.type"
         v-model:error="localErrors.type"
@@ -26,7 +33,7 @@ const emit = defineEmits(['update:data', 'update:errors']);
 
 const localData = computed({
   get() {
-    return props.data;
+    return props.data || {};
   },
   set(value: Train) {
     emit('update:data', value);
@@ -35,7 +42,7 @@ const localData = computed({
 
 const localErrors = computed({
   get() {
-    return props.errors;
+    return props.errors || {};
   },
   set(value: Partial<Train>) {
     emit('update:errors', value);

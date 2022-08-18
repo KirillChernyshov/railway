@@ -24,7 +24,7 @@
         <BaseButton
             size="sm"
             preset="danger"
-            @click="edit(data)"
+            @click="remove(data)"
         >
           R
         </BaseButton>
@@ -42,7 +42,10 @@ import {onMounted} from "vue";
 import {useRouter} from "vue-router";
 
 const trainStore = useTrainStore();
-const trainsList = toRef(trainStore, 'trainsData');
+const trainsList = toRef(trainStore, 'trainsList');
+
+//router
+const router = useRouter();
 
 const headers = ref({
   id: {
@@ -62,7 +65,9 @@ const headers = ref({
 })
 
 const edit = (data) => {
-  console.log(data);
+ navigateTo({
+    path: `trains/edit/${data.id}`,
+  })
 }
 
 const remove = (data) => {
@@ -77,7 +82,6 @@ onMounted(() => {
   getTrainsList();
 })
 
-const router = useRouter();
 function moveToAdd() {
   router.push('trains/add')
 }

@@ -16,5 +16,13 @@ export default defineEventHandler(async (event): Promise<TrainType | H3Error> =>
     if (!bodyTrain.type || !bodyTrain.color)
         return createError({ statusCode: 420, statusMessage: 'Wrong data' });
 
-    return await Train.create(bodyTrain);
+    const train = await Train.findOne({ where: { id: bodyTrain.id }})
+
+    if (!train)
+        return createError({ statusCode: 420, statusMessage: 'Wrong data' });
+
+    return await train.update({
+        type: bodyTrain.type,
+        color: bodyTrain.color,
+    });
 });

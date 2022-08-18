@@ -20,7 +20,7 @@
 <script lang="ts" setup>
 const props = defineProps({
   title: String,
-  value: String,
+  value: [String, Number],
   name: String,
   readonly: Boolean,
   password: {
