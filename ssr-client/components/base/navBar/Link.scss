@@ -1,0 +1,17 @@
+@import "~/assets/styles/colors";
+@import "~/assets/styles/mixins";
+
+.link {
+  color: $first-font-color;
+  margin: auto 12px;
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+
+  @include transition(.3s);
+
+  &:hover {
+    color: $second-font-color;
+  }
+}
