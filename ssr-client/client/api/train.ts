@@ -21,3 +21,8 @@ export const editTrain = (train: Train): Promise<Train> => {
     })
 }
 
+export const removeTrain = (id: number): Promise<void> => {
+    return useTokenFetch(`/api/train/${id}`, {
+        method: 'delete',
+    })
+}

@@ -60,6 +60,26 @@ export const useTrainStore = defineStore('trains', () => {
         }
     }
 
+    const removeTrainById = async (id: number): Promise<void> => {
+        pending.value = true;
+        resultCode.value = 0;
+
+        try {
+            await api.removeTrain(id);
+
+            const index = trainsList.value.findIndex((train) => train.id === id);
+
+            if (index > -1)
+                trainsList.value.splice(index, 1);
+
+            resultCode.value = 1;
+        } catch (e) {
+            // todo: error handler
+        } finally {
+            pending.value = false;
+        }
+    }
+
     const getTrainById = async (id: number): Promise<Train> => {
         pending.value = true;
 
@@ -82,5 +102,6 @@ export const useTrainStore = defineStore('trains', () => {
         addTrain,
         getTrainById,
         editTrain,
+        removeTrainById,
     }
 });

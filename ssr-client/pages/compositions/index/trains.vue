@@ -22,9 +22,9 @@
           E
         </BaseButton>
         <BaseButton
-            size="sm"
-            preset="danger"
-            @click="remove(data)"
+          size="sm"
+          preset="danger"
+          @click="remove(data)"
         >
           R
         </BaseButton>
@@ -65,13 +65,15 @@ const headers = ref({
 })
 
 const edit = (data) => {
- navigateTo({
+  navigateTo({
     path: `trains/edit/${data.id}`,
   })
 }
 
 const remove = (data) => {
-  console.log(data);
+  navigateTo({
+    path: `trains/remove/${data.id}`,
+  })
 }
 
 const getTrainsList = async () => {
