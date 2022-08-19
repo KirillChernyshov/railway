@@ -8,7 +8,7 @@ await setup({
     browser: false
 });
 
-describe('Default layout:', async () => {
+describe.skip('Default layout:', async () => {
     beforeEach(() => {
         // creates a fresh pinia and make it active so it's automatically picked
         // up by any useStore() call without having to pass it to it:
