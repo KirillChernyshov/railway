@@ -1,4 +1,4 @@
-import {DataTypes, Model, InferAttributes, InferCreationAttributes} from "sequelize";
+import {DataTypes, InferAttributes, InferCreationAttributes, Model} from "sequelize";
 import jwt from 'jsonwebtoken';
 import sequelize from "~/server/db";
 import {useRuntimeConfig} from "#imports";
@@ -13,11 +13,26 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     declare password: string;
     declare token: string;
 
-    async generateAuthToken() {
+    async generateAuthToken(): Promise<string> {
         const token = jwt.sign({ id: this.id }, config.jwtSecretWord);
         await this.update({ token: token });
 
         return token
+    };
+
+    static async findByToken(token: string): Promise<User> {
+        try {
+            const data = jwt.verify(token, config.jwtSecretWord);
+
+            return await User.findOne({
+                where: {
+                    id: data.id,
+                    token: token,
+                }
+            });
+        } catch (e) {
+            return null;
+        }
     };
 }
 

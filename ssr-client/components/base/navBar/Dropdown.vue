@@ -18,19 +18,12 @@
       :class="{ right: panelIsRight }"
       ref="panel"
     >
-      <BaseNavBarLink
-        v-for="link in links"
-        :key="link.to + link.title"
-        :title="link.title"
-        :to="link.to"
-      />
       <slot name="panel" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {BaseNavBarLink} from "#components";
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faCaretDown} from "@fortawesome/free-solid-svg-icons";
@@ -89,5 +82,10 @@ watch(panel, (val) => {
     panelIsRight.value = true;
 })
 </script>
+<style lang="scss" scoped>
+:slotted(.link) {
+  /* Иначе не работает класс из ./Dropdown.scss */
+}
+</style>
 
 <style lang="scss" scoped src="./Dropdown.scss" />

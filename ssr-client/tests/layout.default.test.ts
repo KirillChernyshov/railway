@@ -1,6 +1,5 @@
 import {setup, $fetch} from "@nuxt/test-utils-edge";
 import {describe, test, expect, beforeEach} from "vitest";
-import {useUserStore} from "../stores/user";
 import {createPinia, setActivePinia} from "pinia";
 
 await setup({
@@ -9,7 +8,7 @@ await setup({
     browser: false
 });
 
-describe('Default layout:', async () => {
+describe.skip('Default layout:', async () => {
     beforeEach(() => {
         // creates a fresh pinia and make it active so it's automatically picked
         // up by any useStore() call without having to pass it to it:

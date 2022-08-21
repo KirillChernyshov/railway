@@ -44,11 +44,7 @@
     padding: 4px 0;
     top: calc(100% + 5px);
 
-    &.right {
-      right: 0;
-    }
-
-    &>* {
+    :slotted(.link) {
       //min-height: 24px;
       margin: 0;
       padding: 6px 12px;
@@ -62,6 +58,10 @@
         color: $first-font-color;
         background: #1f6feb;
       }
+    }
+
+    &.right {
+      right: 0;
     }
   }
 }

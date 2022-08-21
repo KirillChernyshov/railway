@@ -4,23 +4,33 @@
     <input
       :type="(password) ? 'password' : ''"
       :name="name"
+      :readonly="readonly"
+      @input="localError = ''"
       v-model="localValue"
     />
+    <div
+      v-if="localError"
+      class="error"
+    >
+      {{ localError }}
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 const props = defineProps({
   title: String,
-  value: String,
+  value: [String, Number],
   name: String,
+  readonly: Boolean,
   password: {
     type: Boolean,
     default: false,
-  }
+  },
+  error: String,
 });
 
-const emit = defineEmits(['update:value'])
+const emit = defineEmits(['update:value', 'update:error'])
 
 const localValue = computed({
   get() {
@@ -30,6 +40,15 @@ const localValue = computed({
     emit('update:value', value);
   }
 });
+
+const localError = computed({
+  get() {
+    return props.error;
+  },
+  set(value) {
+    emit('update:error', value);
+  }
+})
 </script>
 
 <style lang="scss" scoped src="./Input.scss" />

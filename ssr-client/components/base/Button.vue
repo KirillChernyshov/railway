@@ -1,7 +1,7 @@
 <template>
   <button
       class="btn"
-      :class="preset"
+      :class="[preset, size]"
       @click="click"
   >
     <span class="prefix">
@@ -27,6 +27,10 @@ const props = defineProps({
   preset: {
     type: String as PropType<BtnPreset>,
     default: 'default',
+  },
+  size: {
+    type: String,
+    default: 'md',
   }
 });
 

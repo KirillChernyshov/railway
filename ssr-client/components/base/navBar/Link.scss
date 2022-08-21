@@ -2,7 +2,7 @@
 @import "~/assets/styles/mixins";
 
 .link {
-  color: $first-font-color;
+  color: $color-header-logo;
   margin: auto 12px;
   text-decoration: none;
   white-space: nowrap;
@@ -12,6 +12,11 @@
   @include transition(.3s);
 
   &:hover {
-    color: $second-font-color;
+    color: $color-header-text;
+  }
+
+  &.disabled {
+    color: $color-fg-subtle;
+    cursor: default;
   }
 }

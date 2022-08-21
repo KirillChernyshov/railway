@@ -2,6 +2,7 @@
   <NuxtLink
     class="link"
     :to="to"
+    :class="{ disabled: disabled }"
   >
     <slot>{{ title }}</slot>
   </NuxtLink>
@@ -16,7 +17,8 @@ defineProps({
   title: {
     type: String,
     default: '',
-  }
+  },
+  disabled: Boolean,
 })
 </script>
 

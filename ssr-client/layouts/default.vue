@@ -14,24 +14,25 @@
       />
       <BaseNavBarLink
         title="Составы"
+        :disabled="!user || user.role < 5"
         to="/compositions"
       />
       <template #right>
         <Loader
-          v-if="user.pendingAuth"
+          v-if="userStore.pendingAuth"
         />
         <BaseNavBarLink
-          v-else-if="!user.name"
+          v-else-if="!userStore.user.name"
           title="Войти"
           to="/log-in"
         />
         <BaseNavBarDropdown
           v-else
-          :title="user.name"
-          :links="links"
+          :title="userStore.user.name"
         >
           <template #panel>
             <BaseNavBarLink
+              class="link"
               title="Выйти"
               to=""
               @click="logOut"
@@ -46,20 +47,15 @@
 
 <script lang="ts" setup>
 import {BaseNavBar, BaseNavBarDropdown, BaseNavBarLink, BaseLogo} from '#components';
-import {useUserStore} from "~/stores/user";
+import {useUserStore} from "~/stores/userStore";
 import Loader from "~/components/tool/Loader.vue";
 
-const user = useUserStore();
-
-const links = ref([
-  {
-    title: 'Other',
-    to: '',
-  }
-])
+const userStore = useUserStore();
+const user = toRef(userStore, 'user');
 
 const logOut = () => {
-  user.logOut();
+  userStore.userLogOut();
+  useRouter().replace('/');
 }
 </script>
 

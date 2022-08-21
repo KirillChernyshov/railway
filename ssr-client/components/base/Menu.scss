@@ -1,0 +1,45 @@
+@import "~/assets/styles/colors";
+
+.menu {
+  height: max-content;
+  margin-bottom: 16px;
+  list-style: none;
+  background-color: $color-canvas-default;
+  border: 1px solid $color-border-default;
+  border-radius: 6px;
+  overflow: hidden;
+
+  &>* {
+    position: relative;
+    display: block;
+    padding: 8px 16px;
+    color: $color-fg-default;
+    border-bottom: 1px solid $color-border-muted;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:last-child {
+      border-bottom-width: 0;
+    }
+
+    &.active {
+      cursor: default;
+      background-color: $color-menu-bg-active;
+
+      &:before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 2px;
+        content: "";
+        background-color: $color-primer-border-active;
+      }
+    }
+
+    &:hover {
+      text-decoration: none;
+      background-color: $color-neutral-subtle;
+    }
+  }
+}

@@ -16,13 +16,13 @@
         />
         <div class="footer">
           <div
-            v-if="user.errorMessage && !user.pendingAuth"
+            v-if="userStore.errorMessage && !userStore.pendingAuth"
             class="error-message"
           >
-            {{ user.errorMessage }}
+            {{ userStore.errorMessage }}
           </div>
           <ToolLoader
-            v-if="user.pendingAuth"
+            v-if="userStore.pendingAuth"
             :size="24"
           />
           <BaseButton
@@ -36,8 +36,8 @@
 </template>
 
 <script lang="ts" setup>
-import {useUserStore} from "~/stores/user";
-import {watch} from "@vue/runtime-core";
+import {useUserStore} from "~/stores/userStore";
+import {toRef} from "@vue/runtime-core";
 import {navigateTo} from "#imports";
 
 definePageMeta({
@@ -45,8 +45,8 @@ definePageMeta({
   middleware: 'auth',
 });
 
-const user = useUserStore();
-const token = toRef(user, 'token');
+const userStore = useUserStore();
+const user = toRef(userStore, 'user');
 
 const userName = ref('');
 const password = ref('');
@@ -55,13 +55,16 @@ const authUser = () => {
   if (!userName.value || !password.value)
     return;
 
-  user.authUser(userName, password);
+  userStore.authUser({
+    name: userName.value,
+    password: password.value,
+  });
 }
 
-watch(token, (value) => {
-  if (value)
+watchEffect(() => {
+  if (user.value.role > 0)
     navigateTo('/');
-})
+});
 </script>
 
 <style lang="scss" scoped src="./log-in.scss" />

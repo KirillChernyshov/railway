@@ -1,9 +1,11 @@
 import {defineNuxtRouteMiddleware, navigateTo} from "#imports";
-import {useUserStore} from "~/stores/user";
+import {useUserStore} from "~/stores/userStore";
 
 export default defineNuxtRouteMiddleware(() => {
-    const user = useUserStore();
+    const userStore = useUserStore();
 
-    if (user.token)
+    const token = toRef(userStore.user, 'token');
+
+    if (token.value)
         return navigateTo('/');
 });
